@@ -47,9 +47,9 @@ Data MAPID / survei / geospasial sekunder
 
 ```text
 Lapak-AI/
-â”œâ”€â”€ frontend/       # Next.js, React, MapLibre
-â”œâ”€â”€ backend/        # Express API dan koneksi PostgreSQL/PostGIS
-â””â”€â”€ .gitignore
+├── frontend/       # Next.js, React, MapLibre
+├── backend/        # Express API dan koneksi PostgreSQL/PostGIS
+└── .gitignore
 ```
 
 ## Persyaratan sistem
