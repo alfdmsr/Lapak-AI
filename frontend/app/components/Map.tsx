@@ -4,28 +4,33 @@ import { useEffect, useRef, useState } from 'react';
 import {
   Map as MapLibreMap,
   NavigationControl,
+  setWorkerUrl,
 } from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
+const apiKey = process.env.NEXT_PUBLIC_MAPID_API_KEY?.trim();
+
 export default function MapComponent() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(
+    apiKey
+      ? null
+      : 'API key MAPID belum diisi. Periksa frontend/.env.local lalu restart server.',
+  );
 
   useEffect(() => {
     if (!containerRef.current) return;
 
-    const apiKey = process.env.NEXT_PUBLIC_MAPID_API_KEY?.trim();
-
     if (!apiKey) {
-      setErrorMessage(
-        'API key MAPID belum diisi. Periksa frontend/.env.local lalu restart server.',
-      );
       return;
     }
 
     let map: MapLibreMap | undefined;
 
     try {
+      // The module worker imports its shared module from this same directory.
+      setWorkerUrl('/maplibre/maplibre-gl-worker.mjs');
+
       const styleUrl = new URL(
         'https://basemap.mapid.io/styles/light/style.json',
       );
@@ -62,6 +67,8 @@ export default function MapComponent() {
         map?.resize();
       });
     } catch {
+      // Report a synchronous failure from the external WebGL/MapLibre system.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setErrorMessage(
         'Peta gagal diinisialisasi. Periksa dukungan WebGL dan Console browser.',
       );
