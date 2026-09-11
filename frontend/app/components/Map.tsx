@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import {
   Map as MapLibreMap,
   NavigationControl,
+  Popup,
   setWorkerUrl,
 } from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
@@ -27,6 +28,7 @@ export default function MapComponent({
 }: MapComponentProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
+  const popupRef = useRef<Popup | null>(null);
 
   const [errorMessage, setErrorMessage] = useState<string | null>(
     apiKey
@@ -102,6 +104,82 @@ export default function MapComponent({
           },
         });
 
+        // Ubah kursor saat melewati titik Menu Go.
+      instance.on('mouseenter', MENU_GO_LAYER_ID, () => {
+      instance.getCanvas().style.cursor = 'pointer';
+      });
+
+      instance.on('mouseleave', MENU_GO_LAYER_ID, () => {
+      instance.getCanvas().style.cursor = '';
+      });
+
+      // Tampilkan informasi titik yang diklik.
+      instance.on('click', MENU_GO_LAYER_ID, (event) => {
+      const feature = event.features?.[0];
+
+      if (!feature || feature.geometry.type !== 'Point') return;
+
+      const properties = feature.properties ?? {};
+      const [longitude, latitude] = feature.geometry.coordinates;
+
+      if (!Number.isFinite(longitude) || !Number.isFinite(latitude)) return;
+
+      // Tutup popup sebelumnya.
+      popupRef.current?.remove();
+
+      const content = document.createElement('div');
+      content.className = 'p-1 text-slate-900';
+
+      const title = document.createElement('h3');
+      title.className = 'text-sm font-semibold';
+      title.textContent = String(properties.name ?? 'Titik Menu Go');
+
+      const category = document.createElement('p');
+      category.className = 'mt-2 text-sm';
+      category.textContent = `Kategori: ${properties.category ?? 'Belum tersedia'}`;
+
+      const price = document.createElement('p');
+      price.className = 'mt-1 text-sm';
+
+      const rawPrice = properties.averagePrice;
+      const averagePrice =
+      typeof rawPrice === 'number' ? rawPrice : Number.NaN;
+
+      price.textContent =
+      Number.isFinite(averagePrice) && averagePrice >= 0
+      ? `Harga rata-rata: ${new Intl.NumberFormat('id-ID', {
+          style: 'currency',
+          currency: 'IDR',
+          maximumFractionDigits: 0,
+        }).format(averagePrice)}`
+      : 'Harga rata-rata: Belum tersedia';
+
+  const badge = document.createElement('p');
+  badge.className =
+    'mt-3 rounded bg-amber-50 px-2 py-1 text-xs text-amber-900';
+  badge.textContent = 'Data simulasi — bukan hasil survei';
+
+  content.append(title, category, price, badge);
+
+  const popup = new Popup({
+    closeButton: true,
+    closeOnClick: true,
+    maxWidth: '280px',
+    offset: 12,
+  })
+    .setLngLat([longitude, latitude])
+    .setDOMContent(content)
+    .addTo(instance);
+
+  popupRef.current = popup;
+
+  popup.on('close', () => {
+    if (popupRef.current === popup) {
+      popupRef.current = null;
+    }
+  });
+});
+
         instance.resize();
       });
 
@@ -120,6 +198,10 @@ export default function MapComponent({
 
     return () => {
       resizeObserver?.disconnect();
+
+      popupRef.current?.remove();
+      popupRef.current = null;
+
       map?.remove();
       mapRef.current = null;
     };
@@ -132,14 +214,22 @@ export default function MapComponent({
     if (!map) return;
 
     function syncVisibility() {
-      if (!map?.getLayer(MENU_GO_LAYER_ID)) return;
+  if (!map?.getLayer(MENU_GO_LAYER_ID)) return;
 
-      map.setLayoutProperty(
-        MENU_GO_LAYER_ID,
-        'visibility',
-        visibility['menu-go'] ? 'visible' : 'none',
-      );
-    }
+  const isVisible = visibility['menu-go'];
+
+  map.setLayoutProperty(
+    MENU_GO_LAYER_ID,
+    'visibility',
+    isVisible ? 'visible' : 'none',
+  );
+
+  if (!isVisible) {
+    popupRef.current?.remove();
+    popupRef.current = null;
+    map.getCanvas().style.cursor = '';
+  }
+}
 
     // Berlaku langsung jika layer sudah tersedia.
     syncVisibility();
