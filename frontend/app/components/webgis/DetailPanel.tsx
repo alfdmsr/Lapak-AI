@@ -1,10 +1,2 @@
-export default function DetailPanel() {
-    return (
-        <section className="px-4">
-            <h2 className="font-semibold">Detail Pilihan</h2>
-            <p className="mt-2 text-sm text-slate-500">
-                Belum ada objek atau area dipilih.
-            </p>
-        </section>
-    );
-}
+import type {Evidence} from '@/types/webgis';
+export default function DetailPanel({item,onAsk}:{item:Evidence|null;onAsk:()=>void}){return <section className="p-5">{item?<><p className="text-xs font-semibold uppercase text-emerald-700">Detail sumber</p><h2 className="mt-2 text-lg font-bold">{item.title}</h2><button onClick={onAsk} className="mt-3 rounded-lg bg-emerald-700 px-3 py-2 text-sm text-white">Tanyakan laporan ini</button><p className="mt-4 whitespace-pre-wrap text-sm leading-6">{item.text}</p>{item.offered_price_idr!=null&&<p className="mt-3 font-semibold">Harga penawaran: Rp{item.offered_price_idr.toLocaleString('id-ID')}</p>}<dl className="mt-5 space-y-2 text-xs text-slate-500"><div>ID: {item.evidence_id}</div>{item.source_pdf_page&&<div>PDF halaman {item.source_pdf_page}</div>}{item.date&&<div>Tanggal laporan: {item.date}</div>}</dl><p className="mt-4 rounded-xl bg-amber-50 p-3 text-xs text-amber-900">{item.coordinates?'Lokasi perkiraan, belum terverifikasi. Kondisi terkini belum dipastikan.':'Tidak ada koordinat yang dapat ditautkan pada katalog ini. Sumber dapat dibaca tanpa menempatkan titik di peta.'}</p></>:<><h2 className="font-semibold">Jelajahi laporan</h2><p className="mt-3 text-sm text-slate-500">Klik titik survei atau pilih hasil pencarian. Laporan dan harga tanpa koordinat tetap dapat ditemukan melalui pencarian.</p></>}</section>}

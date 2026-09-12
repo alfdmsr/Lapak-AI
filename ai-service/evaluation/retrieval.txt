@@ -1,0 +1,16 @@
+{
+  "mode": "retrieval_only",
+  "model_configured": "gemini-2.5-flash",
+  "fingerprint": "9e9d9e7f2d84085b8d39cbef36fbcb88f4400cf6a62b2ba4574ed3c00e915b79",
+  "updated_at": "2026-09-12T09:33:04.569660+00:00",
+  "interrupted": false,
+  "cases": 20,
+  "mean_recall_at_8": 1.0,
+  "counts": {
+    "completed_requires_human_review": 0,
+    "dataset_answer_requires_review": 0,
+    "fallback_requires_review": 0,
+    "failed": 0
+  },
+  "note": "Recall bukan akurasi. Fallback bukan keberhasilan Gemini. Review manusia tetap diperlukan."
+}

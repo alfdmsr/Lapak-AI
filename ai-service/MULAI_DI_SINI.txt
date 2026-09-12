@@ -1,0 +1,40 @@
+LAPAK-AI — paket perbaikan backend dan evaluasi
+
+1. Ekstrak ZIP ke folder baru. Data sudah disertakan, tidak perlu merge atau preprocessing ulang.
+2. Salin .env milikmu dari folder lama ke folder ini. Jangan kirim file tersebut ke chat/frontend.
+   Alternatif: copy .env.example .env kemudian edit dengan notepad .env.
+3. Jalankan tanpa API:
+   python -m unittest discover -p "test_*.py"
+   python evaluate.py
+4. Uji jawaban dataset tanpa panggilan API (meskipun mode live):
+   python jawab.py "Berapa rata-rata harga menu di kawasan ini?" --mode live
+5. Setelah kuota memungkinkan, uji kasus yang dulu gagal pada laporan baru:
+   python evaluate.py --live --ids dayabeli omzet avg terlaris injeksi palsu luar
+   Jangan menjalankan server dan evaluasi live bersamaan. Jeda hanya dikelola per proses.
+6. Jika dihentikan Ctrl+C, ulangi perintah langkah 5 untuk kasus yang belum selesai.
+   Untuk mengulang failed/fallback dan melanjutkan yang belum selesai:
+   python evaluate.py --live --ids dayabeli omzet avg terlaris injeksi palsu luar --retry-failed
+   Kasus berhasil dilewati. Tidak perlu mengulang 20 kasus terus-menerus.
+7. Melengkapi seluruh kasus yang belum diuji:
+   python evaluate.py --live
+8. Model/kode/data berubah? Gunakan laporan baru:
+   python evaluate.py --live --output evaluation/live_baru.json
+   Jangan menyalin live.json versi lama sebagai checkpoint; fingerprint belum tersedia di versi lama.
+9. Integrasi lokal: python server.py
+   Backend cukup dijalankan sekali. Frontend mengirim POST /chat; lihat integrasi/client.js.
+
+STATUS HASIL:
+completed_requires_human_review: respons Gemini lolos struktur dan ID sumber, belum pasti benar.
+dataset_answer_requires_review: jawaban tetap dari metadata, tidak memanggil Gemini.
+fallback_requires_review: respons model ditolak; tampilkan pesan tetap, bukan isi yang ditolak.
+failed: panggilan gagal. Lihat error di evaluation/live.json.
+Recall bukan akurasi. Nilai human_review null berarti belum diperiksa.
+
+BATAS PERBAIKAN:
+Pertanyaan rata-rata kawasan yang dikenali secara persis dijawab dari metadata null.
+Parafrasa lain tetap memakai Gemini dan validasi. Fallback generik bukan bukti jawaban memadai.
+Pacing minimum 6 detik per panggilan dalam satu proses, retry 429 menunggu minimal 60 detik.
+Tidak menjamin bebas limit harian/token atau permintaan aplikasi lain. Evaluator berhenti jika
+429 masih terjadi setelah retry. Ctrl+C aman untuk hasil kasus yang sudah tersimpan.
+Tidak ada fine-tuning. Tidak ada klaim daya beli/omzet atau koordinat tervalidasi.
+Server stdlib hanya untuk pengembangan lokal, belum deployment produksi.

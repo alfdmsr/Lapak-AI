@@ -1,0 +1,49 @@
+{
+  "basemap": {
+    "light": {
+      "status": "received",
+      "http": 200,
+      "requested_style_host": "basemap.mapid.io",
+      "source_hosts": [
+        "basemap.mapid.io"
+      ],
+      "is_gl_style": true,
+      "note": "Host style dapat berbeda dari host data tile. Atribusi tidak dihapus. TileJSON lanjutan tidak diambil."
+    },
+    "satellite": {
+      "status": "received",
+      "http": 200,
+      "requested_style_host": "basemap.mapid.io",
+      "source_hosts": [
+        "api.mapbox.com",
+        "api.maptiler.com"
+      ],
+      "is_gl_style": true,
+      "note": "Host style dapat berbeda dari host data tile. Atribusi tidak dihapus. TileJSON lanjutan tidak diambil."
+    },
+    "basic": {
+      "status": "received",
+      "http": 200,
+      "requested_style_host": "basemap.mapid.io",
+      "source_hosts": [
+        "basemap.mapid.io",
+        "klokantech.github.io"
+      ],
+      "is_gl_style": true,
+      "note": "Host style dapat berbeda dari host data tile. Atribusi tidak dihapus. TileJSON lanjutan tidak diambil."
+    }
+  },
+  "project": {
+    "status": "received",
+    "http": 200,
+    "response_type": "list",
+    "top_level_count": 0,
+    "name_hints": {
+      "menu": false,
+      "struk": false,
+      "properti": false,
+      "property": false
+    },
+    "note": "Petunjuk nama bukan bukti akses isi dataset. Daftar kosong hanya berlaku pada respons proyek ini; bukan bukti semua data MAPID tidak tersedia."
+  }
+}

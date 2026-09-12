@@ -1,266 +1,43 @@
 'use client';
-
-import { useEffect, useRef, useState } from 'react';
-import {
-  Map as MapLibreMap,
-  NavigationControl,
-  Popup,
-  setWorkerUrl,
-} from 'maplibre-gl';
+import {useEffect,useRef,useState} from 'react';
+import {Map as GLMap,NavigationControl,AttributionControl,setWorkerUrl} from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
-
-import { MENU_GO_DEMO_DATA } from '@/lib/webgis/demo-data';
-import {
-  MENU_GO_COLOR,
-  MENU_GO_LAYER_ID,
-  MENU_GO_SOURCE_ID,
-} from '@/lib/webgis/layer-config';
-import type { LayerVisibility } from '@/types/webgis';
-
-const apiKey = process.env.NEXT_PUBLIC_MAPID_API_KEY?.trim();
-
-interface MapComponentProps {
-  visibility: LayerVisibility;
-}
-
-export default function MapComponent({
-  visibility,
-}: MapComponentProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const mapRef = useRef<MapLibreMap | null>(null);
-  const popupRef = useRef<Popup | null>(null);
-
-  const [errorMessage, setErrorMessage] = useState<string | null>(
-    apiKey
-      ? null
-      : 'API key MAPID belum diisi. Periksa konfigurasi environment lalu restart server.',
-  );
-
-  // Buat peta satu kali untuk setiap pemasangan komponen.
-  useEffect(() => {
-    const container = containerRef.current;
-
-    if (!container || !apiKey) return;
-
-    let map: MapLibreMap | undefined;
-    let resizeObserver: ResizeObserver | undefined;
-
-    try {
-      setWorkerUrl('/maplibre/maplibre-gl-worker.mjs');
-
-      const styleUrl = new URL(
-        'https://basemap.mapid.io/styles/light/style.json',
-      );
-      styleUrl.searchParams.set('key', apiKey);
-
-      const instance = new MapLibreMap({
-        container,
-        style: styleUrl.toString(),
-        center: [107.1612, -6.2575],
-        zoom: 15,
-
-        transformRequest: (url) => {
-          const requestUrl = new URL(url, window.location.href);
-
-          // Kirim key hanya ke origin basemap MAPID.
-          if (requestUrl.origin === 'https://basemap.mapid.io') {
-            requestUrl.searchParams.set('key', apiKey);
-            return { url: requestUrl.toString() };
-          }
-
-          return { url };
-        },
-      });
-
-      map = instance;
-      mapRef.current = instance;
-
-      instance.addControl(new NavigationControl(), 'top-right');
-
-      instance.on('error', () => {
-        setErrorMessage(
-          'Sebagian data peta gagal dimuat. Periksa koneksi dan konfigurasi layanan peta.',
-        );
-      });
-
-      instance.on('load', () => {
-        instance.addSource(MENU_GO_SOURCE_ID, {
-          type: 'geojson',
-          data: MENU_GO_DEMO_DATA,
-        });
-
-        instance.addLayer({
-          id: MENU_GO_LAYER_ID,
-          type: 'circle',
-          source: MENU_GO_SOURCE_ID,
-          layout: {
-            visibility: 'none',
-          },
-          paint: {
-            'circle-radius': 7,
-            'circle-color': MENU_GO_COLOR,
-            'circle-stroke-width': 2,
-            'circle-stroke-color': '#ffffff',
-          },
-        });
-
-        // Ubah kursor saat melewati titik Menu Go.
-      instance.on('mouseenter', MENU_GO_LAYER_ID, () => {
-      instance.getCanvas().style.cursor = 'pointer';
-      });
-
-      instance.on('mouseleave', MENU_GO_LAYER_ID, () => {
-      instance.getCanvas().style.cursor = '';
-      });
-
-      // Tampilkan informasi titik yang diklik.
-      instance.on('click', MENU_GO_LAYER_ID, (event) => {
-      const feature = event.features?.[0];
-
-      if (!feature || feature.geometry.type !== 'Point') return;
-
-      const properties = feature.properties ?? {};
-      const [longitude, latitude] = feature.geometry.coordinates;
-
-      if (!Number.isFinite(longitude) || !Number.isFinite(latitude)) return;
-
-      // Tutup popup sebelumnya.
-      popupRef.current?.remove();
-
-      const content = document.createElement('div');
-      content.className = 'p-1 text-slate-900';
-
-      const title = document.createElement('h3');
-      title.className = 'text-sm font-semibold';
-      title.textContent = String(properties.name ?? 'Titik Menu Go');
-
-      const category = document.createElement('p');
-      category.className = 'mt-2 text-sm';
-      category.textContent = `Kategori: ${properties.category ?? 'Belum tersedia'}`;
-
-      const price = document.createElement('p');
-      price.className = 'mt-1 text-sm';
-
-      const rawPrice = properties.averagePrice;
-      const averagePrice =
-      typeof rawPrice === 'number' ? rawPrice : Number.NaN;
-
-      price.textContent =
-      Number.isFinite(averagePrice) && averagePrice >= 0
-      ? `Harga rata-rata: ${new Intl.NumberFormat('id-ID', {
-          style: 'currency',
-          currency: 'IDR',
-          maximumFractionDigits: 0,
-        }).format(averagePrice)}`
-      : 'Harga rata-rata: Belum tersedia';
-
-  const badge = document.createElement('p');
-  badge.className =
-    'mt-3 rounded bg-amber-50 px-2 py-1 text-xs text-amber-900';
-  badge.textContent = 'Data simulasi — bukan hasil survei';
-
-  content.append(title, category, price, badge);
-
-  const popup = new Popup({
-    closeButton: true,
-    closeOnClick: true,
-    maxWidth: '280px',
-    offset: 12,
-  })
-    .setLngLat([longitude, latitude])
-    .setDOMContent(content)
-    .addTo(instance);
-
-  popupRef.current = popup;
-
-  popup.on('close', () => {
-    if (popupRef.current === popup) {
-      popupRef.current = null;
-    }
-  });
-});
-
-        instance.resize();
-      });
-
-      // Sesuaikan canvas ketika ruang peta berubah ukuran.
-      resizeObserver = new ResizeObserver(() => {
-        instance.resize();
-      });
-      resizeObserver.observe(container);
-    } catch {
-      // Tampilkan kegagalan sinkron dari sistem eksternal MapLibre/WebGL.
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setErrorMessage(
-        'Peta gagal diinisialisasi. Periksa dukungan WebGL dan konfigurasi peta.',
-      );
-    }
-
-    return () => {
-      resizeObserver?.disconnect();
-
-      popupRef.current?.remove();
-      popupRef.current = null;
-
-      map?.remove();
-      mapRef.current = null;
-    };
-  }, []);
-
-  // Perbarui layer tanpa membuat ulang peta.
-  useEffect(() => {
-    const map = mapRef.current;
-
-    if (!map) return;
-
-    function syncVisibility() {
-  if (!map?.getLayer(MENU_GO_LAYER_ID)) return;
-
-  const isVisible = visibility['menu-go'];
-
-  map.setLayoutProperty(
-    MENU_GO_LAYER_ID,
-    'visibility',
-    isVisible ? 'visible' : 'none',
-  );
-
-  if (!isVisible) {
-    popupRef.current?.remove();
-    popupRef.current = null;
-    map.getCanvas().style.cursor = '';
-  }
-}
-
-    // Berlaku langsung jika layer sudah tersedia.
-    syncVisibility();
-
-    // Tangani juga perubahan checkbox sebelum peta selesai dimuat.
-    // Listener pembuat layer pada effect pertama berjalan lebih dahulu.
-    map.on('load', syncVisibility);
-
-    return () => {
-      map.off('load', syncVisibility);
-    };
-  }, [visibility]);
-
-  return (
-    <div className="relative h-full w-full">
-      {/* MapLibre's unlayered CSS overrides Tailwind's position utility.
-          Keep this container absolute so it fills the map area. */}
-      <div ref={containerRef} style={{ position: 'absolute', inset: 0 }} />
-
-      <div className="pointer-events-none absolute left-3 top-3 rounded-md bg-amber-50 px-3 py-2 text-xs font-medium text-amber-900 shadow">
-        Overlay Menu Go: data simulasi
-      </div>
-
-      {errorMessage && (
-        <div
-          role="alert"
-          className="absolute left-3 right-14 top-16 z-10 rounded-lg bg-rose-50 p-3 text-sm text-rose-800 shadow"
-        >
-          {errorMessage}
-        </div>
-      )}
-    </div>
-  );
+import type {LayerId,LayerVisibility,Evidence} from '@/types/webgis';
+type Props={visibility:LayerVisibility;opacity:number;basemap:'satellite'|'light'|'basic';focus:number;selected:Evidence|null;onPick:(ids:string[])=>void};
+const key=process.env.NEXT_PUBLIC_MAPID_API_KEY?.trim();
+const layers:[string,LayerId,string,'line-opacity'|'fill-opacity'|'circle-opacity'][]=[['boundary-line','boundary','line','line-opacity'],['survey-points','survei','circle','circle-opacity'],['osm-line','osm','line','line-opacity'],['osm-fill','osm','fill','fill-opacity'],['osm-points','osm','circle','circle-opacity'],['rbi-line','rbi','line','line-opacity'],['rbi-fill','rbi','fill','fill-opacity'],['rbi-points','rbi','circle','circle-opacity']];
+function style(name:string){const u=new URL(`https://basemap.mapid.io/styles/${name}/style.json`);u.searchParams.set('key',key||'');return u.toString();}
+export default function MapComponent(props:Props){
+ const container=useRef<HTMLDivElement>(null),map=useRef<GLMap|null>(null),latest=useRef(props);
+ const [error,setError]=useState('');
+ useEffect(()=>{latest.current=props;const m=map.current;if(!m)return;for(const [id,v,,paint] of layers)if(m.getLayer(id)){m.setLayoutProperty(id,'visibility',props.visibility[v]?'visible':'none');m.setPaintProperty(id,paint,paint==='fill-opacity'?props.opacity*.04:props.opacity);}},[props]);
+ useEffect(()=>{if(!container.current||!key)return;
+ setWorkerUrl('/maplibre/maplibre-gl-worker.mjs');
+ let m:GLMap;
+ try {m=new GLMap({container:container.current,attributionControl:false,style:style(latest.current.basemap),center:[107.1450733,-6.2553138],zoom:14.6,transformRequest:url=>{const u=new URL(url,window.location.href);if(u.origin==='https://basemap.mapid.io'){u.searchParams.set('key',key);return {url:u.toString()};}return {url};}});}catch{queueMicrotask(()=>setError('Peta tidak dapat dimulai. Periksa dukungan WebGL browser.'));return;}
+ map.current=m;m.addControl(new NavigationControl(),'top-right');m.addControl(new AttributionControl({compact:false,customAttribution:'Basemap: <a href="https://mapid.io/" target="_blank" rel="noopener noreferrer">MAPID</a>'}),'bottom-right');
+ m.on('error',()=>setError('Sebagian aset peta belum termuat. Coba basemap lain atau periksa izin key MAPID.'));
+ m.on('style.load',()=>{
+ setError('');
+ const sources={boundary:'study_boundary',survey:'survey_unverified',osm:'osm_reference',rbi:'rbi_reference'};
+ for(const [id,path] of Object.entries(sources))if(!m.getSource(id))m.addSource(id,{type:'geojson',data:`/api/ai/layers/${path}`});
+ m.addLayer({id:'boundary-line',type:'line',source:'boundary',paint:{'line-color':'#60a5fa','line-width':3,'line-dasharray':[3,2]}});
+ m.addLayer({id:'survey-points',type:'circle',source:'survey',paint:{'circle-color':'#10b981','circle-radius':8,'circle-stroke-color':'#fff','circle-stroke-width':2}});
+ for(const [id,color] of [['osm','#fb923c'],['rbi','#c084fc']]){
+ m.addLayer({id:`${id}-fill`,type:'fill',source:id,filter:['==',['geometry-type'],'Polygon'],paint:{'fill-color':color,'fill-opacity':.04}});
+ m.addLayer({id:`${id}-line`,type:'line',source:id,filter:['!=',['geometry-type'],'Point'],paint:{'line-color':color,'line-width':1.5}});
+ m.addLayer({id:`${id}-points`,type:'circle',source:id,filter:['==',['geometry-type'],'Point'],paint:{'circle-color':color,'circle-radius':4}});
+ }
+ for(const [id,v,,paint] of layers){m.setLayoutProperty(id,'visibility',latest.current.visibility[v]?'visible':'none');m.setPaintProperty(id,paint,paint==='fill-opacity'?latest.current.opacity*.04:latest.current.opacity);}
+ m.moveLayer('survey-points');
+ });
+ m.on('click',e=>{if(!m.getLayer('survey-points'))return;const hits=m.queryRenderedFeatures(e.point,{layers:['survey-points']});const ids=[...new Set(hits.map(f=>String(f.properties.observation_id||f.id)))];if(ids.length)latest.current.onPick(ids);});
+ m.on('mousemove',e=>{if(m.getLayer('survey-points'))m.getCanvas().style.cursor=m.queryRenderedFeatures(e.point,{layers:['survey-points']}).length?'pointer':'';});
+ const observer=new ResizeObserver(()=>m.resize());observer.observe(container.current);
+ return ()=>{observer.disconnect();m.remove();map.current=null;};
+ },[]);
+ useEffect(()=>{const m=map.current;if(m){m.setStyle(style(props.basemap));m.easeTo({pitch:props.basemap==='basic'?55:0});}},[props.basemap]);
+ useEffect(()=>{map.current?.fitBounds([[107.1357,-6.2645],[107.1545,-6.2461]],{padding:40,duration:700});},[props.focus]);
+ useEffect(()=>{if(props.selected?.coordinates)map.current?.flyTo({center:props.selected.coordinates,zoom:16});},[props.selected]);
+ return <div className="relative h-full w-full"><div ref={container} style={{position:'absolute',inset:0}}/>{(!key||error)&&<div role="alert" className="absolute bottom-4 left-4 right-4 rounded-xl bg-white p-3 text-sm text-amber-900 shadow">{!key?'Isi key basemap pada konfigurasi frontend untuk menampilkan peta.':error}</div>}<div className="pointer-events-none absolute bottom-10 left-4 rounded-lg bg-slate-900/80 px-3 py-2 text-xs text-white">Radius 1 km · lokasi survei perkiraan</div></div>;
 }

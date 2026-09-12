@@ -1,0 +1,53 @@
+{
+  "answer": "Rata-rata harga menu kawasan belum dapat dihitung dari dataset ini. Lokasi item harga belum dipastikan; harga penawaran bukan transaksi [1].",
+  "evidence_ids": [
+    "summary"
+  ],
+  "limitations": [
+    "Pusat studi masih koordinat geocoding sementara.",
+    "Lokasi seluruh survei belum tervalidasi. Data tanpa koordinat tidak dimasukkan statistik area.",
+    "22 item dengan harga belum diketahui lokasi pastinya; belum bisa menjadi rata-rata harga kawasan.",
+    "Tidak ada transaksi. Jumlah observasi properti bukan jumlah properti unik.",
+    "OSM/RBI adalah referensi yang mungkin tidak lengkap dan bisa mewakili objek yang sama.",
+    "Teks survei dan OCR belum diverifikasi ulang seluruhnya; tanggal laporan bukan jaminan kondisi terkini."
+  ],
+  "sources": [],
+  "mode": "dataset_answer_not_llm",
+  "validation": "fixed_message_not_generated_answer",
+  "fallback_reason": "area_average_menu_price_unavailable",
+  "attempts": 0,
+  "api_version": "2",
+  "display": {
+    "answer": "Rata-rata harga menu kawasan belum dapat dihitung dari dataset ini. Lokasi item harga belum dipastikan; harga penawaran bukan transaksi [1].",
+    "sources": [
+      {
+        "evidence_id": "summary",
+        "title": "Ringkasan kualitas dataset",
+        "date": null,
+        "source_pdf_page": null,
+        "number": 1,
+        "location_label": "Metadata dataset"
+      }
+    ],
+    "notes": [],
+    "details": {
+      "model_limitations": [
+        "Pusat studi masih koordinat geocoding sementara.",
+        "Lokasi seluruh survei belum tervalidasi. Data tanpa koordinat tidak dimasukkan statistik area.",
+        "22 item dengan harga belum diketahui lokasi pastinya; belum bisa menjadi rata-rata harga kawasan.",
+        "Tidak ada transaksi. Jumlah observasi properti bukan jumlah properti unik.",
+        "OSM/RBI adalah referensi yang mungkin tidak lengkap dan bisa mewakili objek yang sama.",
+        "Teks survei dan OCR belum diverifikasi ulang seluruhnya; tanggal laporan bukan jaminan kondisi terkini."
+      ],
+      "dataset_limitations": [
+        "Pusat studi masih koordinat geocoding sementara.",
+        "Lokasi seluruh survei belum tervalidasi. Data tanpa koordinat tidak dimasukkan statistik area.",
+        "22 item dengan harga belum diketahui lokasi pastinya; belum bisa menjadi rata-rata harga kawasan.",
+        "Tidak ada transaksi. Jumlah observasi properti bukan jumlah properti unik.",
+        "OSM/RBI adalah referensi yang mungkin tidak lengkap dan bisa mewakili objek yang sama.",
+        "Teks survei dan OCR belum diverifikasi ulang seluruhnya; tanggal laporan bukan jaminan kondisi terkini."
+      ]
+    }
+  },
+  "raw_answer": "Rata-rata harga menu kawasan belum dapat dihitung dari dataset ini. Lokasi item harga belum dipastikan; harga penawaran bukan transaksi [1]."
+}

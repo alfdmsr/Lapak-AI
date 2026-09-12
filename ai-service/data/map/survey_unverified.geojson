@@ -1,0 +1,294 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "activity:page:0",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          107.1416209,
+          -6.2557827
+        ]
+      },
+      "properties": {
+        "observation_id": "activity:page:0",
+        "title": "Bahu Jalan Depan Al Barokah 2 Sempit Akibat Parkir Liar",
+        "location_verified": false,
+        "dataset_role": "survey_unverified"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "activity:page:12",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          107.1416209,
+          -6.2557827
+        ]
+      },
+      "properties": {
+        "observation_id": "activity:page:12",
+        "title": "Jalanan Rusak di Pertigaan Pasar Tumpah Pagi, SGC Cikarang",
+        "location_verified": false,
+        "dataset_role": "survey_unverified"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "activity:page:13",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          107.1416209,
+          -6.2557827
+        ]
+      },
+      "properties": {
+        "observation_id": "activity:page:13",
+        "title": "Gorengan di Dekat Stasiun Cikarang",
+        "location_verified": false,
+        "dataset_role": "survey_unverified"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "activity:page:15",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          107.1416209,
+          -6.2557827
+        ]
+      },
+      "properties": {
+        "observation_id": "activity:page:15",
+        "title": "",
+        "location_verified": false,
+        "dataset_role": "survey_unverified"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "activity:page:16",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          107.1450733,
+          -6.2553138
+        ]
+      },
+      "properties": {
+        "observation_id": "activity:page:16",
+        "title": "Kondisi Lalu Lintas",
+        "location_verified": false,
+        "dataset_role": "survey_unverified"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "activity:page:18",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          107.1450733,
+          -6.2553138
+        ]
+      },
+      "properties": {
+        "observation_id": "activity:page:18",
+        "title": "Keterbatasan Lahan Parkir Stasiun Cikarang Hambat Sirkulasi Kendaraan Komuter",
+        "location_verified": false,
+        "dataset_role": "survey_unverified"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "activity:page:2",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          107.1416209,
+          -6.2557827
+        ]
+      },
+      "properties": {
+        "observation_id": "activity:page:2",
+        "title": "",
+        "location_verified": false,
+        "dataset_role": "survey_unverified"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "activity:page:20",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          107.1450733,
+          -6.2553138
+        ]
+      },
+      "properties": {
+        "observation_id": "activity:page:20",
+        "title": "Alih Fungsi Fasilitas Pedestrian oleh PKL di Jalur Masuk Stasiun Cikarang",
+        "location_verified": false,
+        "dataset_role": "survey_unverified"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "activity:page:23",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          107.1450733,
+          -6.2553138
+        ]
+      },
+      "properties": {
+        "observation_id": "activity:page:23",
+        "title": "Alih Fungsi Fasilitas Pedestrian oleh PKL di Jalur Masuk Stasiun Cikarang",
+        "location_verified": false,
+        "dataset_role": "survey_unverified"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "activity:page:25",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          107.1416209,
+          -6.2557827
+        ]
+      },
+      "properties": {
+        "observation_id": "activity:page:25",
+        "title": "",
+        "location_verified": false,
+        "dataset_role": "survey_unverified"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "activity:page:26",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          107.1416209,
+          -6.2557827
+        ]
+      },
+      "properties": {
+        "observation_id": "activity:page:26",
+        "title": "Indomaret Stasiun Cikarang",
+        "location_verified": false,
+        "dataset_role": "survey_unverified"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "activity:page:3",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          107.1416209,
+          -6.2557827
+        ]
+      },
+      "properties": {
+        "observation_id": "activity:page:3",
+        "title": "",
+        "location_verified": false,
+        "dataset_role": "survey_unverified"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "activity:page:33",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          107.1416209,
+          -6.2557827
+        ]
+      },
+      "properties": {
+        "observation_id": "activity:page:33",
+        "title": "Ruko Kosong berjarak 150m dari stasiun Cikarang.",
+        "location_verified": false,
+        "dataset_role": "survey_unverified"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "activity:page:4",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          107.1416209,
+          -6.2557827
+        ]
+      },
+      "properties": {
+        "observation_id": "activity:page:4",
+        "title": "",
+        "location_verified": false,
+        "dataset_role": "survey_unverified"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "activity:page:48",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          107.1507657,
+          -6.2566855
+        ]
+      },
+      "properties": {
+        "observation_id": "activity:page:48",
+        "title": "ruko disewakan di Jl. Yos Sudarso",
+        "location_verified": false,
+        "dataset_role": "survey_unverified"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "activity:page:54",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          107.1450733,
+          -6.2553138
+        ]
+      },
+      "properties": {
+        "observation_id": "activity:page:54",
+        "title": "Terdapat rumah yang dijual",
+        "location_verified": false,
+        "dataset_role": "survey_unverified"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "activity:page:7",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          107.1416209,
+          -6.2557827
+        ]
+      },
+      "properties": {
+        "observation_id": "activity:page:7",
+        "title": "Etalase PKL Blokir Jalur Pemandu Trotoar Depan Bahagia Elektronik",
+        "location_verified": false,
+        "dataset_role": "survey_unverified"
+      }
+    }
+  ]
+}
