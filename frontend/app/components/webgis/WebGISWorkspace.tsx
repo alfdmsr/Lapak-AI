@@ -1,79 +1,25 @@
 'use client';
-
-import { useState } from 'react';
+import {useState,useEffect,useCallback} from 'react';
 import dynamic from 'next/dynamic';
-
-import AppHeader from './AppHeader';
 import LayerPanel from './LayerPanel';
-import SummaryDashboard from './SummaryDashboard';
 import DetailPanel from './DetailPanel';
 import InsightPanel from './InsightPanel';
-
-import { INITIAL_LAYER_VISIBILITY } from '@/lib/webgis/layer-config';
-import type { LayerId, LayerVisibility } from '@/types/webgis';
-
-const MapComponent = dynamic(() => import('../Map'), {
-  ssr: false,
-  loading: () => (
-    <div className="flex h-full items-center justify-center bg-slate-100">
-      <p className="text-sm text-slate-500">Memuat peta MAPID…</p>
-    </div>
-  ),
-});
-
-export default function WebGISWorkspace() {
-  const [visibility, setVisibility] = useState<LayerVisibility>(
-    INITIAL_LAYER_VISIBILITY,
-  );
-
-  function handleToggleLayer(id: LayerId, checked: boolean) {
-    setVisibility((previous) => ({
-      ...previous,
-      [id]: checked,
-    }));
-  }
-
-  return (
-    <div className="flex min-h-dvh flex-col bg-slate-50 text-slate-900 lg:h-dvh lg:overflow-hidden">
-      <div className="shrink-0">
-        <AppHeader />
-      </div>
-
-      <main className="grid flex-1 grid-cols-1 lg:min-h-0 lg:grid-cols-[260px_minmax(0,1fr)_320px]">
-        <aside
-          aria-label="Layer dan filter peta"
-          className="border-b border-slate-200 bg-white lg:overflow-y-auto lg:border-r lg:border-b-0"
-        >
-          <LayerPanel
-            visibility={visibility}
-            onToggle={handleToggleLayer}
-          />
-        </aside>
-
-        <div className="flex min-w-0 flex-col lg:min-h-0">
-          <section
-            aria-label="Peta kawasan Stasiun Cikarang"
-            className="relative h-[60dvh] min-h-[320px] lg:h-auto lg:min-h-0 lg:flex-1"
-          >
-            <MapComponent visibility={visibility} />
-          </section>
-
-          <div className="shrink-0 border-t border-slate-200 bg-white lg:max-h-[35dvh] lg:overflow-y-auto">
-            <SummaryDashboard />
-          </div>
-        </div>
-
-        <aside
-          aria-label="Detail dan analisis"
-          className="border-t border-slate-200 bg-white lg:min-h-0 lg:overflow-y-auto lg:border-t-0 lg:border-l"
-        >
-          <div className="border-b border-slate-200">
-            <DetailPanel />
-          </div>
-
-          <InsightPanel />
-        </aside>
-      </main>
-    </div>
-  );
+import {INITIAL_LAYER_VISIBILITY} from '@/lib/webgis/layer-config';
+import type {Evidence} from '@/types/webgis';
+const Map=dynamic(()=>import('../Map'),{ssr:false,loading:()=><div className="grid h-full place-items-center bg-slate-100">Memuat peta…</div>});
+export default function WebGISWorkspace(){
+const [left,setLeft]=useState(true),[right,setRight]=useState(true),[tab,setTab]=useState('detail');
+const [visibility,setVisibility]=useState(INITIAL_LAYER_VISIBILITY),[opacity,setOpacity]=useState(.8),[basemap,setBasemap]=useState<'satellite'|'light'|'basic'>('light'),[focus,setFocus]=useState(0);
+const [catalog,setCatalog]=useState<Evidence[]>([]),[query,setQuery]=useState(''),[selected,setSelected]=useState<Evidence|null>(null),[nearby,setNearby]=useState<Evidence[]>([]),[error,setError]=useState('');
+const [askTarget,setAskTarget]=useState<Evidence|null>(null);
+useEffect(()=>{fetch('/catalog.json').then(r=>{if(!r.ok)throw Error();return r.json();}).then(setCatalog).catch(()=>setError('Katalog laporan gagal dimuat. Muat ulang halaman.'));},[]);
+const choose=useCallback((e:Evidence)=>{setSelected(e);setRight(true);setTab('detail');},[]);
+const pick=useCallback((ids:string[])=>{const matches=catalog.filter(e=>ids.includes(e.evidence_id));setNearby(matches);if(matches[0])choose(matches[0]);},[catalog,choose]);
+const results=query.trim()?catalog.filter(e=>`${e.title} ${e.text}`.toLowerCase().includes(query.trim().toLowerCase())):[];
+return <div className="flex h-dvh flex-col overflow-hidden bg-slate-100 text-slate-900"><header className="flex shrink-0 flex-wrap items-center justify-between gap-3 border-b bg-white px-5 py-3"><div><h1 className="text-lg font-extrabold tracking-tight">LAPAK<span className="text-emerald-600">·AI</span></h1><p className="text-xs text-slate-500">Eksplorasi kawasan Stasiun Cikarang</p></div><div className="flex gap-2"><button onClick={()=>setLeft(!left)} className="rounded-lg border px-3 py-2 text-sm">{left?'Tutup explorer':'Explorer'}</button><button onClick={()=>setFocus(f=>f+1)} className="rounded-lg border px-3 py-2 text-sm">Fokus 1 km</button><button onClick={()=>setRight(!right)} className="rounded-lg bg-emerald-700 px-3 py-2 text-sm text-white">{right?'Tutup panel':'Detail & AI'}</button></div></header>
+<main className="relative flex min-h-0 flex-1">
+{left&&<aside className="absolute inset-y-0 left-0 z-20 w-72 overflow-y-auto border-r bg-white shadow-lg lg:static lg:shrink-0 lg:shadow-none"><div className="border-b p-4"><h2 className="font-bold">Map Explorer</h2><input aria-label="Cari laporan atau menu" value={query} onChange={e=>setQuery(e.target.value)} placeholder="Cari laporan, usaha, menu…" className="mt-3 w-full rounded-xl border p-3 text-sm"/>{error&&<p role="alert">{error}</p>}{query&&<div className="mt-2 max-h-60 overflow-y-auto"><p className="text-xs text-slate-500">{results.length} hasil dalam katalog</p>{results.slice(0,30).map(e=><button key={e.evidence_id} onClick={()=>{choose(e);setNearby([]);}} className="mt-2 block w-full rounded-lg bg-slate-50 p-2 text-left text-sm">{e.title}<span className="block text-xs text-slate-500">{e.coordinates?'Lokasi perkiraan':'Tanpa titik peta'}</span></button>)}</div>}</div><LayerPanel visibility={visibility} onToggle={(id,v)=>setVisibility(s=>({...s,[id]:v}))} opacity={opacity} onOpacity={setOpacity}/></aside>}
+<section className="relative min-w-0 flex-1" aria-label="Peta kawasan"><Map visibility={visibility} opacity={opacity} basemap={basemap} focus={focus} selected={selected} onPick={pick}/><div className="absolute left-4 top-4 rounded-xl bg-white p-2 shadow"><label className="mr-2 text-xs font-semibold" htmlFor="basemap">Basemap</label><select id="basemap" value={basemap} onChange={e=>setBasemap(e.target.value as typeof basemap)} className="rounded-lg border p-2 text-sm"><option value="light">MAPID Terang</option><option value="satellite">MAPID Satelit</option><option value="basic">MAPID Basic · 3D</option></select></div></section>
+{right&&<aside className="absolute inset-y-0 right-0 z-30 flex w-[min(90vw,380px)] flex-col border-l bg-white shadow-xl xl:static xl:shrink-0 xl:shadow-none"><nav className="flex shrink-0 border-b p-2">{['detail','ai'].map(t=><button key={t} onClick={()=>setTab(t)} className={`flex-1 rounded-lg p-2 text-sm font-semibold ${tab===t?'bg-emerald-50 text-emerald-800':''}`}>{t==='detail'?'Detail objek':'AI Copilot'}</button>)}</nav><div className={tab==='detail'?'min-h-0 flex-1 overflow-y-auto':'hidden'}>{nearby.length>1&&<div className="border-b p-4"><p className="mb-2 text-xs text-slate-500">{nearby.length} laporan bertumpuk di titik ini</p>{nearby.map(e=><button key={e.evidence_id} onClick={()=>choose(e)} className="mb-1 block text-left text-sm text-emerald-700">{e.title}</button>)}</div>}<DetailPanel item={selected} onAsk={()=>{setAskTarget(selected);setTab('ai');}}/></div><div className={tab==='ai'?'flex min-h-0 flex-1 flex-col':'hidden'}><InsightPanel target={askTarget} onClearTarget={()=>setAskTarget(null)}/></div></aside>}
+</main><footer className="shrink-0 border-t bg-white px-5 py-2 text-xs text-slate-500">Data laporan dan referensi · bukan inventaris lengkap · harga penawaran bukan transaksi</footer></div>;
 }

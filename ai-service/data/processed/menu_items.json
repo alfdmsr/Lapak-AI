@@ -1,0 +1,478 @@
+[
+  {
+    "menu_id": "activity:page:13:item:0",
+    "observation_id": "activity:page:13",
+    "name": "tempe goreng",
+    "offered_price_idr": null,
+    "evidence_type": "extracted_offered_price_not_transaction",
+    "business_id": null,
+    "verified": false,
+    "raw_item": {
+      "nama_item": "tempe goreng",
+      "harga": null
+    },
+    "study_membership": "inside_approximate",
+    "price_kind": "offered_price",
+    "eligible_for_area_price_statistics": false,
+    "location_verified": false
+  },
+  {
+    "menu_id": "activity:page:13:item:1",
+    "observation_id": "activity:page:13",
+    "name": "tahu crispy",
+    "offered_price_idr": null,
+    "evidence_type": "extracted_offered_price_not_transaction",
+    "business_id": null,
+    "verified": false,
+    "raw_item": {
+      "nama_item": "tahu crispy",
+      "harga": null
+    },
+    "study_membership": "inside_approximate",
+    "price_kind": "offered_price",
+    "eligible_for_area_price_statistics": false,
+    "location_verified": false
+  },
+  {
+    "menu_id": "activity:page:13:item:2",
+    "observation_id": "activity:page:13",
+    "name": "cireng",
+    "offered_price_idr": null,
+    "evidence_type": "extracted_offered_price_not_transaction",
+    "business_id": null,
+    "verified": false,
+    "raw_item": {
+      "nama_item": "cireng",
+      "harga": null
+    },
+    "study_membership": "inside_approximate",
+    "price_kind": "offered_price",
+    "eligible_for_area_price_statistics": false,
+    "location_verified": false
+  },
+  {
+    "menu_id": "activity:page:13:item:3",
+    "observation_id": "activity:page:13",
+    "name": "bakwan",
+    "offered_price_idr": null,
+    "evidence_type": "extracted_offered_price_not_transaction",
+    "business_id": null,
+    "verified": false,
+    "raw_item": {
+      "nama_item": "bakwan",
+      "harga": null
+    },
+    "study_membership": "inside_approximate",
+    "price_kind": "offered_price",
+    "eligible_for_area_price_statistics": false,
+    "location_verified": false
+  },
+  {
+    "menu_id": "activity:page:13:item:4",
+    "observation_id": "activity:page:13",
+    "name": "risol",
+    "offered_price_idr": null,
+    "evidence_type": "extracted_offered_price_not_transaction",
+    "business_id": null,
+    "verified": false,
+    "raw_item": {
+      "nama_item": "risol",
+      "harga": null
+    },
+    "study_membership": "inside_approximate",
+    "price_kind": "offered_price",
+    "eligible_for_area_price_statistics": false,
+    "location_verified": false
+  },
+  {
+    "menu_id": "activity:page:13:item:5",
+    "observation_id": "activity:page:13",
+    "name": "combro",
+    "offered_price_idr": null,
+    "evidence_type": "extracted_offered_price_not_transaction",
+    "business_id": null,
+    "verified": false,
+    "raw_item": {
+      "nama_item": "combro",
+      "harga": null
+    },
+    "study_membership": "inside_approximate",
+    "price_kind": "offered_price",
+    "eligible_for_area_price_statistics": false,
+    "location_verified": false
+  },
+  {
+    "menu_id": "activity:page:24:item:0",
+    "observation_id": "activity:page:24",
+    "name": "Choco Topping Pie",
+    "offered_price_idr": 12500,
+    "evidence_type": "extracted_offered_price_not_transaction",
+    "business_id": null,
+    "verified": false,
+    "raw_item": {
+      "nama_item": "Choco Topping Pie",
+      "harga": 12500
+    },
+    "study_membership": "unknown_missing_coordinates",
+    "price_kind": "offered_price",
+    "eligible_for_area_price_statistics": false,
+    "location_verified": false
+  },
+  {
+    "menu_id": "activity:page:24:item:1",
+    "observation_id": "activity:page:24",
+    "name": "Cheese Topping Pie",
+    "offered_price_idr": 12500,
+    "evidence_type": "extracted_offered_price_not_transaction",
+    "business_id": null,
+    "verified": false,
+    "raw_item": {
+      "nama_item": "Cheese Topping Pie",
+      "harga": 12500
+    },
+    "study_membership": "unknown_missing_coordinates",
+    "price_kind": "offered_price",
+    "eligible_for_area_price_statistics": false,
+    "location_verified": false
+  },
+  {
+    "menu_id": "activity:page:24:item:2",
+    "observation_id": "activity:page:24",
+    "name": "Choco Stripe",
+    "offered_price_idr": 12500,
+    "evidence_type": "extracted_offered_price_not_transaction",
+    "business_id": null,
+    "verified": false,
+    "raw_item": {
+      "nama_item": "Choco Stripe",
+      "harga": 12500
+    },
+    "study_membership": "unknown_missing_coordinates",
+    "price_kind": "offered_price",
+    "eligible_for_area_price_statistics": false,
+    "location_verified": false
+  },
+  {
+    "menu_id": "activity:page:24:item:3",
+    "observation_id": "activity:page:24",
+    "name": "Sausage Blackpepper",
+    "offered_price_idr": 12000,
+    "evidence_type": "extracted_offered_price_not_transaction",
+    "business_id": null,
+    "verified": false,
+    "raw_item": {
+      "nama_item": "Sausage Blackpepper",
+      "harga": 12000
+    },
+    "study_membership": "unknown_missing_coordinates",
+    "price_kind": "offered_price",
+    "eligible_for_area_price_statistics": false,
+    "location_verified": false
+  },
+  {
+    "menu_id": "activity:page:24:item:4",
+    "observation_id": "activity:page:24",
+    "name": "Roti Ayam Suwir",
+    "offered_price_idr": 14000,
+    "evidence_type": "extracted_offered_price_not_transaction",
+    "business_id": null,
+    "verified": false,
+    "raw_item": {
+      "nama_item": "Roti Ayam Suwir",
+      "harga": 14000
+    },
+    "study_membership": "unknown_missing_coordinates",
+    "price_kind": "offered_price",
+    "eligible_for_area_price_statistics": false,
+    "location_verified": false
+  },
+  {
+    "menu_id": "activity:page:24:item:5",
+    "observation_id": "activity:page:24",
+    "name": "Polo Cokelat",
+    "offered_price_idr": 13000,
+    "evidence_type": "extracted_offered_price_not_transaction",
+    "business_id": null,
+    "verified": false,
+    "raw_item": {
+      "nama_item": "Polo Cokelat",
+      "harga": 13000
+    },
+    "study_membership": "unknown_missing_coordinates",
+    "price_kind": "offered_price",
+    "eligible_for_area_price_statistics": false,
+    "location_verified": false
+  },
+  {
+    "menu_id": "activity:page:24:item:6",
+    "observation_id": "activity:page:24",
+    "name": "Polo Keju",
+    "offered_price_idr": 13000,
+    "evidence_type": "extracted_offered_price_not_transaction",
+    "business_id": null,
+    "verified": false,
+    "raw_item": {
+      "nama_item": "Polo Keju",
+      "harga": 13000
+    },
+    "study_membership": "unknown_missing_coordinates",
+    "price_kind": "offered_price",
+    "eligible_for_area_price_statistics": false,
+    "location_verified": false
+  },
+  {
+    "menu_id": "activity:page:24:item:7",
+    "observation_id": "activity:page:24",
+    "name": "Salt Bread Garlic",
+    "offered_price_idr": 12000,
+    "evidence_type": "extracted_offered_price_not_transaction",
+    "business_id": null,
+    "verified": false,
+    "raw_item": {
+      "nama_item": "Salt Bread Garlic",
+      "harga": 12000
+    },
+    "study_membership": "unknown_missing_coordinates",
+    "price_kind": "offered_price",
+    "eligible_for_area_price_statistics": false,
+    "location_verified": false
+  },
+  {
+    "menu_id": "activity:page:24:item:8",
+    "observation_id": "activity:page:24",
+    "name": "Salt Bread",
+    "offered_price_idr": 12000,
+    "evidence_type": "extracted_offered_price_not_transaction",
+    "business_id": null,
+    "verified": false,
+    "raw_item": {
+      "nama_item": "Salt Bread",
+      "harga": 12000
+    },
+    "study_membership": "unknown_missing_coordinates",
+    "price_kind": "offered_price",
+    "eligible_for_area_price_statistics": false,
+    "location_verified": false
+  },
+  {
+    "menu_id": "activity:page:24:item:9",
+    "observation_id": "activity:page:24",
+    "name": "Choco Martabak",
+    "offered_price_idr": 12500,
+    "evidence_type": "extracted_offered_price_not_transaction",
+    "business_id": null,
+    "verified": false,
+    "raw_item": {
+      "nama_item": "Choco Martabak",
+      "harga": 12500
+    },
+    "study_membership": "unknown_missing_coordinates",
+    "price_kind": "offered_price",
+    "eligible_for_area_price_statistics": false,
+    "location_verified": false
+  },
+  {
+    "menu_id": "activity:page:24:item:10",
+    "observation_id": "activity:page:24",
+    "name": "Walnut & Raisin",
+    "offered_price_idr": 12000,
+    "evidence_type": "extracted_offered_price_not_transaction",
+    "business_id": null,
+    "verified": false,
+    "raw_item": {
+      "nama_item": "Walnut & Raisin",
+      "harga": 12000
+    },
+    "study_membership": "unknown_missing_coordinates",
+    "price_kind": "offered_price",
+    "eligible_for_area_price_statistics": false,
+    "location_verified": false
+  },
+  {
+    "menu_id": "activity:page:24:item:11",
+    "observation_id": "activity:page:24",
+    "name": "Double Cheese Bread",
+    "offered_price_idr": 12500,
+    "evidence_type": "extracted_offered_price_not_transaction",
+    "business_id": null,
+    "verified": false,
+    "raw_item": {
+      "nama_item": "Double Cheese Bread",
+      "harga": 12500
+    },
+    "study_membership": "unknown_missing_coordinates",
+    "price_kind": "offered_price",
+    "eligible_for_area_price_statistics": false,
+    "location_verified": false
+  },
+  {
+    "menu_id": "activity:page:24:item:12",
+    "observation_id": "activity:page:24",
+    "name": "Salt Bread Cheese",
+    "offered_price_idr": 14000,
+    "evidence_type": "extracted_offered_price_not_transaction",
+    "business_id": null,
+    "verified": false,
+    "raw_item": {
+      "nama_item": "Salt Bread Cheese",
+      "harga": 14000
+    },
+    "study_membership": "unknown_missing_coordinates",
+    "price_kind": "offered_price",
+    "eligible_for_area_price_statistics": false,
+    "location_verified": false
+  },
+  {
+    "menu_id": "activity:page:24:item:13",
+    "observation_id": "activity:page:24",
+    "name": "Chocolate Croissant",
+    "offered_price_idr": 18000,
+    "evidence_type": "extracted_offered_price_not_transaction",
+    "business_id": null,
+    "verified": false,
+    "raw_item": {
+      "nama_item": "Chocolate Croissant",
+      "harga": 18000
+    },
+    "study_membership": "unknown_missing_coordinates",
+    "price_kind": "offered_price",
+    "eligible_for_area_price_statistics": false,
+    "location_verified": false
+  },
+  {
+    "menu_id": "activity:page:24:item:14",
+    "observation_id": "activity:page:24",
+    "name": "Nutella B-ready",
+    "offered_price_idr": 11900,
+    "evidence_type": "extracted_offered_price_not_transaction",
+    "business_id": null,
+    "verified": false,
+    "raw_item": {
+      "nama_item": "Nutella B-ready",
+      "harga": 11900
+    },
+    "study_membership": "unknown_missing_coordinates",
+    "price_kind": "offered_price",
+    "eligible_for_area_price_statistics": false,
+    "location_verified": false
+  },
+  {
+    "menu_id": "activity:page:24:item:15",
+    "observation_id": "activity:page:24",
+    "name": "Ferrero Rocher",
+    "offered_price_idr": 30700,
+    "evidence_type": "extracted_offered_price_not_transaction",
+    "business_id": null,
+    "verified": false,
+    "raw_item": {
+      "nama_item": "Ferrero Rocher",
+      "harga": 30700
+    },
+    "study_membership": "unknown_missing_coordinates",
+    "price_kind": "offered_price",
+    "eligible_for_area_price_statistics": false,
+    "location_verified": false
+  },
+  {
+    "menu_id": "activity:page:24:item:16",
+    "observation_id": "activity:page:24",
+    "name": "Kinder Bueno",
+    "offered_price_idr": 15800,
+    "evidence_type": "extracted_offered_price_not_transaction",
+    "business_id": null,
+    "verified": false,
+    "raw_item": {
+      "nama_item": "Kinder Bueno",
+      "harga": 15800
+    },
+    "study_membership": "unknown_missing_coordinates",
+    "price_kind": "offered_price",
+    "eligible_for_area_price_statistics": false,
+    "location_verified": false
+  },
+  {
+    "menu_id": "activity:page:24:item:17",
+    "observation_id": "activity:page:24",
+    "name": "Fisherman's Friend",
+    "offered_price_idr": 22900,
+    "evidence_type": "extracted_offered_price_not_transaction",
+    "business_id": null,
+    "verified": false,
+    "raw_item": {
+      "nama_item": "Fisherman's Friend",
+      "harga": 22900
+    },
+    "study_membership": "unknown_missing_coordinates",
+    "price_kind": "offered_price",
+    "eligible_for_area_price_statistics": false,
+    "location_verified": false
+  },
+  {
+    "menu_id": "activity:page:24:item:18",
+    "observation_id": "activity:page:24",
+    "name": "Strepsils",
+    "offered_price_idr": 26200,
+    "evidence_type": "extracted_offered_price_not_transaction",
+    "business_id": null,
+    "verified": false,
+    "raw_item": {
+      "nama_item": "Strepsils",
+      "harga": 26200
+    },
+    "study_membership": "unknown_missing_coordinates",
+    "price_kind": "offered_price",
+    "eligible_for_area_price_statistics": false,
+    "location_verified": false
+  },
+  {
+    "menu_id": "activity:page:31:item:0",
+    "observation_id": "activity:page:31",
+    "name": "Paket Fried Chicken",
+    "offered_price_idr": 15000,
+    "evidence_type": "extracted_offered_price_not_transaction",
+    "business_id": null,
+    "verified": false,
+    "raw_item": {
+      "nama_item": "Paket Fried Chicken",
+      "harga": 15000
+    },
+    "study_membership": "unknown_missing_coordinates",
+    "price_kind": "offered_price",
+    "eligible_for_area_price_statistics": false,
+    "location_verified": false
+  },
+  {
+    "menu_id": "activity:page:31:item:1",
+    "observation_id": "activity:page:31",
+    "name": "Paket Fried Chicken",
+    "offered_price_idr": 25000,
+    "evidence_type": "extracted_offered_price_not_transaction",
+    "business_id": null,
+    "verified": false,
+    "raw_item": {
+      "nama_item": "Paket Fried Chicken",
+      "harga": 25000
+    },
+    "study_membership": "unknown_missing_coordinates",
+    "price_kind": "offered_price",
+    "eligible_for_area_price_statistics": false,
+    "location_verified": false
+  },
+  {
+    "menu_id": "activity:page:31:item:2",
+    "observation_id": "activity:page:31",
+    "name": "Fried Snack",
+    "offered_price_idr": 17000,
+    "evidence_type": "extracted_offered_price_not_transaction",
+    "business_id": null,
+    "verified": false,
+    "raw_item": {
+      "nama_item": "Fried Snack",
+      "harga": 17000
+    },
+    "study_membership": "unknown_missing_coordinates",
+    "price_kind": "offered_price",
+    "eligible_for_area_price_statistics": false,
+    "location_verified": false
+  }
+]

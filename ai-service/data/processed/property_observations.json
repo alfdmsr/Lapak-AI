@@ -1,0 +1,184 @@
+[
+  {
+    "property_observation_id": "activity:page:33:property",
+    "observation_id": "activity:page:33",
+    "details": {
+      "jenis": "ruko",
+      "luas_m2": null,
+      "harga": null
+    },
+    "property_entity_id": null,
+    "verified": false,
+    "study_membership": "inside_approximate",
+    "availability_verified": false,
+    "eligible_for_location_recommendation": false
+  },
+  {
+    "property_observation_id": "activity:page:37:property",
+    "observation_id": "activity:page:37",
+    "details": {
+      "jenis": "kontrakan",
+      "luas_m2": null,
+      "harga": null
+    },
+    "property_entity_id": null,
+    "verified": false,
+    "study_membership": "unknown_missing_coordinates",
+    "availability_verified": false,
+    "eligible_for_location_recommendation": false
+  },
+  {
+    "property_observation_id": "activity:page:38:property",
+    "observation_id": "activity:page:38",
+    "details": {
+      "jenis": "ruko",
+      "luas_m2": null,
+      "harga": null
+    },
+    "property_entity_id": null,
+    "verified": false,
+    "study_membership": "unknown_missing_coordinates",
+    "availability_verified": false,
+    "eligible_for_location_recommendation": false
+  },
+  {
+    "property_observation_id": "activity:page:40:property",
+    "observation_id": "activity:page:40",
+    "details": {
+      "jenis": "ruko",
+      "luas_m2": null,
+      "harga": null
+    },
+    "property_entity_id": null,
+    "verified": false,
+    "study_membership": "unknown_missing_coordinates",
+    "availability_verified": false,
+    "eligible_for_location_recommendation": false
+  },
+  {
+    "property_observation_id": "activity:page:43:property",
+    "observation_id": "activity:page:43",
+    "details": {
+      "jenis": "tanah/bangunan",
+      "luas_m2": null,
+      "harga": null
+    },
+    "property_entity_id": null,
+    "verified": false,
+    "study_membership": "unknown_missing_coordinates",
+    "availability_verified": false,
+    "eligible_for_location_recommendation": false
+  },
+  {
+    "property_observation_id": "activity:page:44:property",
+    "observation_id": "activity:page:44",
+    "details": {
+      "jenis": "Ruko/Coworking space",
+      "luas_m2": null,
+      "harga": null
+    },
+    "property_entity_id": null,
+    "verified": false,
+    "study_membership": "unknown_missing_coordinates",
+    "availability_verified": false,
+    "eligible_for_location_recommendation": false
+  },
+  {
+    "property_observation_id": "activity:page:46:property",
+    "observation_id": "activity:page:46",
+    "details": {
+      "jenis": "ruko",
+      "luas_m2": null,
+      "harga": null
+    },
+    "property_entity_id": null,
+    "verified": false,
+    "study_membership": "unknown_missing_coordinates",
+    "availability_verified": false,
+    "eligible_for_location_recommendation": false
+  },
+  {
+    "property_observation_id": "activity:page:47:property",
+    "observation_id": "activity:page:47",
+    "details": {
+      "jenis": "toko",
+      "luas_m2": null,
+      "harga": null
+    },
+    "property_entity_id": null,
+    "verified": false,
+    "study_membership": "unknown_missing_coordinates",
+    "availability_verified": false,
+    "eligible_for_location_recommendation": false
+  },
+  {
+    "property_observation_id": "activity:page:48:property",
+    "observation_id": "activity:page:48",
+    "details": {
+      "jenis": "ruko",
+      "luas_m2": null,
+      "harga": null
+    },
+    "property_entity_id": null,
+    "verified": false,
+    "study_membership": "inside_approximate",
+    "availability_verified": false,
+    "eligible_for_location_recommendation": false
+  },
+  {
+    "property_observation_id": "activity:page:49:property",
+    "observation_id": "activity:page:49",
+    "details": {
+      "jenis": "ruko",
+      "luas_m2": null,
+      "harga": null
+    },
+    "property_entity_id": null,
+    "verified": false,
+    "study_membership": "unknown_missing_coordinates",
+    "availability_verified": false,
+    "eligible_for_location_recommendation": false
+  },
+  {
+    "property_observation_id": "activity:page:50:property",
+    "observation_id": "activity:page:50",
+    "details": {
+      "jenis": "kontrakan",
+      "luas_m2": null,
+      "harga": null
+    },
+    "property_entity_id": null,
+    "verified": false,
+    "study_membership": "unknown_missing_coordinates",
+    "availability_verified": false,
+    "eligible_for_location_recommendation": false
+  },
+  {
+    "property_observation_id": "activity:page:53:property",
+    "observation_id": "activity:page:53",
+    "details": {
+      "jenis": "bangunan",
+      "luas_m2": null,
+      "harga": null
+    },
+    "property_entity_id": null,
+    "verified": false,
+    "study_membership": "unknown_missing_coordinates",
+    "availability_verified": false,
+    "eligible_for_location_recommendation": false
+  },
+  {
+    "property_observation_id": "activity:page:54:property",
+    "observation_id": "activity:page:54",
+    "details": {
+      "jenis": "rumah",
+      "luas_m2": null,
+      "harga": null
+    },
+    "property_entity_id": null,
+    "verified": false,
+    "study_membership": "inside_approximate",
+    "availability_verified": false,
+    "eligible_for_location_recommendation": false
+  }
+]
