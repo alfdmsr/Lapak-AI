@@ -1,96 +1,173 @@
-# Versi Copilot terkait objek
+# LAPAK-AI
 
-Baca PRD_DAN_COPILOT.md terlebih dahulu.
+**Optimalisasi Penataan Zonasi PKL dan Strategi Lokasi Usaha F&B Berbasis Spatial-AI di Catchment Area Stasiun Cikarang**
 
-# Mulai dari PANDUAN_UI.md
+LAPAK-AI adalah platform WebGIS yang membantu pemerintah daerah, pelaku UMKM, dan pemilik usaha F&B memahami kondisi ekonomi mikro serta tata ruang di sekitar Stasiun Cikarang. Sistem menggabungkan peta interaktif, data geospasial, data survei lapangan, dan analisis spasial untuk menghasilkan rekomendasi yang dapat ditindaklanjuti.
 
-Versi ini menambahkan UI Explorer tahap 1–3. Panduan integrasi di bawah tetap berlaku.
+## Tujuan
 
-# LAPAK-AI — integrasi WebGIS dan AI
+- Membantu pemerintah menentukan zonasi atau relokasi PKL dengan mempertimbangkan akses pejalan kaki dan ketersediaan ruang.
+- Membantu pelaku usaha memilih lokasi F&B yang lebih prospektif.
+- Mengidentifikasi titik keramaian, hambatan trotoar, dan peluang ruang usaha dalam radius studi sekitar Stasiun Cikarang.
+- Menyediakan AI Copilot yang menjelaskan hasil analisis berdasarkan data agregat, bukan membuat data spasial secara mandiri.
 
-Paket ini menghubungkan frontend Next.js ke layanan Python berbasis bukti dan Gemini.
-Frontend → `/api/ai/chat` (Next.js) → `/chat` (Python) → konteks dataset + Gemini.
-Tidak ada fine-tuning; data referensi tetap dibaca di layanan AI. Menu Go simulasi tidak masuk konteks AI.
+## Fitur yang direncanakan
 
-## Setup pertama (Windows CMD)
+- Basemap resmi MAPID MAPS melalui MapLibre GL JS.
+- Peta multi-layer untuk data Menu Go, Struk Go, Properti Go, dan survei lapangan.
+- Isochrone atau buffer jangkauan jalan kaki.
+- Heatmap kepadatan aktivitas ekonomi menggunakan KDE.
+- Spatial mismatch dan suitability scoring.
+- Dashboard ringkasan area terpilih.
+- AI Copilot untuk insight dan matriks rekomendasi.
+- Ekspor laporan ringkas.
 
-Butuh Python 3.10+ dan Node/npm yang sesuai package.json frontend.
-Buka terminal pada folder yang berisi README ini:
+## Arsitektur singkat
 
-```bat
+```text
+Data MAPID / survei / geospasial sekunder
+                |
+                v
+      Cleaning dan validasi GeoJSON
+                |
+                v
+        PostgreSQL + PostGIS
+                |
+                v
+       Backend REST API (Express)
+                |
+                v
+     Frontend Next.js + MapLibre
+                |
+                v
+   Analisis spasial dan AI Copilot
+```
+
+## Struktur repository
+
+```text
+Lapak-AI/
+├── frontend/       # Next.js, React, MapLibre
+├── backend/        # Express API dan koneksi PostgreSQL/PostGIS
+└── .gitignore
+```
+
+## Persyaratan sistem
+
+- Node.js 20 atau lebih baru
+- npm
+- PostgreSQL dengan ekstensi PostGIS
+- Git
+- Browser modern dengan dukungan WebGL
+
+## Instalasi
+
+Clone repository dan masuk ke folder proyek:
+
+```bash
+git clone https://github.com/alfdmsr/Lapak-AI.git
+cd Lapak-AI
+```
+
+### Menjalankan frontend
+
+```bash
 cd frontend
-npm ci
-copy .env.local.example .env.local
-notepad .env.local
-cd ..
+npm install
+npm run dev
 ```
 
-Isi `NEXT_PUBLIC_MAPID_API_KEY` dengan key basemap yang memang diizinkan untuk browser.
-`AI_BACKEND_URL=http://127.0.0.1:8000` adalah alamat internal layanan Python, bukan API key.
-Key basemap tersebut terlihat di browser; jangan memakai token privat pengambilan data di sini.
+Buka alamat yang ditampilkan terminal, biasanya `http://localhost:3000`.
 
-Salin `.env` Gemini milikmu dari paket AI sebelumnya ke `ai-service/.env`, atau:
+Jika port 3000 sedang digunakan:
 
-```bat
-cd ai-service
-copy .env.example .env
-notepad .env
-cd ..
+```bash
+npm run dev -- --port 3001
 ```
 
-Isi GEMINI_API_KEY dan GEMINI_MODEL yang dapat diakses akunmu. Jangan menyertakan `.env` dalam Git.
-Proxy Next.js tidak meneruskan header Origin browser ke Python, sehingga perpindahan port frontend
-3000/3001 tidak membutuhkan perubahan WEBGIS_ORIGIN untuk jalur proxy ini.
+Untuk pengujian menggunakan Webpack:
 
-## Menjalankan
-
-```bat
-python run_dev.py
+```bash
+npm run dev -- --webpack
 ```
 
-Buka alamat `Local` yang dicetak Next.js. Backend dan frontend berjalan bersama; Ctrl+C berhenti.
-Jangan menyalakan server.py kedua pada port 8000.
-Jika ingin manual, terminal pertama: `cd ai-service` lalu `python server.py`.
-Terminal kedua: `cd frontend` lalu `npm run dev -- --webpack`.
+### Konfigurasi basemap MAPID
 
-Uji chat: `Berapa rata-rata harga menu di kawasan ini?` memakai metadata tanpa API Gemini.
-Kemudian `Apa laporan tentang trotoar?` memakai Gemini. Jangan menjalankan evaluasi live bersamaan.
-Lihat jawaban, buka Sumber dan Keterbatasan data. Pesan gagal ditampilkan tanpa menghapus jawaban lama.
-Riwayat di UI hanya selama halaman terbuka; pertanyaan belum memakai memori percakapan.
+Buat file `frontend/.env.local` dan isi API key secara lokal:
 
-## Peta dan data
-
-Batas 1 km memakai pusat sementara 107.1450733, -6.2553138.
-Survei berupa titik perkiraan; beberapa laporan bertumpuk pada koordinat yang sama.
-Menu Go simulasi tersedia tetapi default mati. Struk/properti Go belum tersedia.
-Ringkasan menyebut jumlah seluruh dataset, bukan jumlah usaha unik/objek terverifikasi dalam radius.
-Tidak ada filter polygon untuk chat, ranking lokasi presisi, atau prediksi ekonomi.
-Koneksi MAPID berfungsi sebagai basemap; bukan akses otomatis ke data menu/struk/properti premium.
-
-## Struktur yang digunakan
-
-- frontend/: WebGIS, panel chat, proxy `/api/ai/*`.
-- ai-service/: backend Python dan seluruh data terproses.
-- backend/: kode tes PostGIS asli tim; belum diperlukan untuk alur chat ini.
-- REVIEW_INTEGRASI.md: temuan evaluasi dan hasil pemeriksaan teknis.
-
-## Pemeriksaan
-
-```bat
-python -m unittest discover -s ai-service -p "test_*.py"
-cd frontend
-npm run lint
-npm run build -- --webpack
+```env
+NEXT_PUBLIC_MAPID_API_KEY=GANTI_DENGAN_API_KEY_MAPID
 ```
 
-Tes Python memakai simulasi: pesan retry/dibatalkan pada unittest bukan error API nyata.
-Untuk evaluasi live gunakan petunjuk `ai-service/MULAI_DI_SINI.txt`.
-Simpan laporan evaluasi baru terpisah dari arsip review; jangan klaim recall sebagai akurasi AI.
+Jangan commit `.env.local`, API key asli, password database, atau token apa pun ke GitHub. Restart server setelah mengubah environment variable.
 
-## Sebelum deployment
+Style MAPID yang digunakan:
 
-Ini paket integrasi lokal, belum layanan publik produksi. Server Python stdlib hanya untuk development.
-Tim perlu server produksi, HTTPS, autentikasi, pembatasan kuota bersama dan timeout yang sesuai retry.
-AI_BACKEND_URL nantinya menunjuk alamat layanan AI yang dapat diakses server Next.js.
-Jangan mengganti URL browser menjadi localhost milik laptop pengembang.
-Tidak diperlukan laptop pengembang menyala setelah kedua layanan dipasang di server.
+```text
+https://basemap.mapid.io/styles/light/style.json?key=API_KEY
+```
+
+### Menjalankan backend
+
+Buka terminal kedua dari folder utama proyek:
+
+```bash
+cd Lapak-AI/backend
+npm install
+```
+
+Buat file `backend/.env` secara lokal:
+
+```env
+PORT=4000
+DB_USER=postgres
+DB_HOST=localhost
+DB_NAME=lapak_ai_db
+DB_PASSWORD=GANTI_DENGAN_PASSWORD_LOKAL
+DB_PORT=5432
+```
+
+Backend saat ini menyediakan fondasi koneksi database. Endpoint API dan pipeline impor data akan ditambahkan bertahap.
+
+## Database PostGIS
+
+Contoh inisialisasi pada PostgreSQL:
+
+```sql
+CREATE DATABASE lapak_ai_db;
+\c lapak_ai_db
+CREATE EXTENSION IF NOT EXISTS postgis;
+```
+
+Data spasial LAPAK-AI sebaiknya disimpan dalam SRID `4326` (`geometry(Point, 4326)` atau tipe geometri yang sesuai). Struktur tabel final harus mengikuti atribut data yang benar-benar tersedia setelah cleaning.
+
+## Alur pengembangan data
+
+1. Samarkan atau hapus nama, nomor telepon, email, dan identitas lain.
+2. Validasi koordinat, geometri, duplikasi, dan cakupan area studi.
+3. Simpan data transaksi atau daya beli dalam bentuk agregat, bukan data individu.
+4. Impor data bersih ke PostgreSQL/PostGIS.
+5. Sediakan endpoint GeoJSON untuk frontend.
+6. Jalankan analisis spasial pada backend.
+7. Kirim hanya ringkasan agregat ke AI Copilot.
+
+## Privasi dan etika data
+
+- Gunakan data samaran seperti `PKL-001`, `SURVEY-001`, atau `RESPONDEN-A`.
+- Jangan menyimpan nama asli, nomor HP, alamat kontak, atau identitas responden dalam repository.
+- Foto survei tidak boleh menampilkan wajah yang dapat dikenali atau plat nomor kendaraan; lakukan blur sebelum dipakai.
+- Data Struk Go harus diagregasi dan tidak boleh digunakan untuk mengidentifikasi pelanggan.
+- Jika suatu dataset tidak tersedia, tampilkan status `data belum tersedia`; jangan mengarang nilai daya beli.
+- Data sintetis harus diberi label `simulasi` dan tidak boleh dipresentasikan sebagai data lapangan nyata.
+
+## Prinsip AI Copilot
+
+AI Copilot hanya menerima ringkasan JSON dari backend, misalnya jumlah objek, rata-rata harga, jumlah titik tervalidasi, dan skor kelayakan. Perhitungan spasial tetap dilakukan oleh kode backend/PostGIS. Dengan demikian, AI berfungsi sebagai penerjemah dan asisten keputusan, bukan sumber data spasial baru.
+
+## Kontribusi
+
+Gunakan branch fitur dan pull request untuk perubahan besar. Sebelum commit, pastikan tidak ada `.env`, API key, password, foto survei mentah, atau data pribadi yang ikut masuk.
+
+## Lisensi
+
+Proyek ini dikembangkan untuk kebutuhan kompetisi MAPID WebGIS. Ketentuan penggunaan data MAPID, data survei, dan aset pihak ketiga tetap mengikuti lisensi serta aturan dari masing-masing penyedia.
