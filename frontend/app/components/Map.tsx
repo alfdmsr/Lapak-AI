@@ -16,7 +16,17 @@ export default function MapComponent(props:Props){
  let m:GLMap;
  try {m=new GLMap({container:container.current,attributionControl:false,style:style(latest.current.basemap),center:[107.1450733,-6.2553138],zoom:14.6,transformRequest:url=>{const u=new URL(url,window.location.href);if(u.origin==='https://basemap.mapid.io'){u.searchParams.set('key',key);return {url:u.toString()};}return {url};}});}catch{queueMicrotask(()=>setError('Peta tidak dapat dimulai. Periksa dukungan WebGL browser.'));return;}
  map.current=m;m.addControl(new NavigationControl(),'top-right');m.addControl(new AttributionControl({compact:false,customAttribution:'Basemap: <a href="https://mapid.io/" target="_blank" rel="noopener noreferrer">MAPID</a>'}),'bottom-right');
- m.on('error',()=>setError('Sebagian aset peta belum termuat. Coba basemap lain atau periksa izin key MAPID.'));
+ m.on('error',(event)=>{
+  const sourceId='sourceId' in event ? event.sourceId : undefined;
+  const message=event.error?.message || '';
+  if((typeof sourceId==='string' && ['boundary','survey','osm','rbi'].includes(sourceId)) || message.includes('/api/ai/layers/')) {
+   setError('Layer data belum termuat. Periksa koneksi backend dan konfigurasi AI_BACKEND_URL.');
+  } else if(message.includes('basemap.mapid.io')) {
+   setError('Sebagian aset basemap MAPID belum termuat. Periksa koneksi dan status request MAPID.');
+  } else {
+   setError('Sebagian data atau aset peta gagal dimuat. Periksa request yang gagal di Network browser.');
+  }
+ });
  m.on('style.load',()=>{
  setError('');
  const sources={boundary:'study_boundary',survey:'survey_unverified',osm:'osm_reference',rbi:'rbi_reference'};

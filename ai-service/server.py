@@ -1,42 +1,93 @@
-"""Backend pengembangan lokal; bukan server produksi publik."""
-import json,os
-from http.server import ThreadingHTTPServer,BaseHTTPRequestHandler
+"""HTTP API for LAPAK-AI. Run with python server.py or uvicorn server:app."""
+import json
+import os
 from pathlib import Path
-from jawab import answer,ROOT
-LAYERS={n:ROOT/'data'/'map'/(n+'.geojson') for n in ['study_boundary','osm_reference','rbi_reference','survey_unverified']}
-class Handler(BaseHTTPRequestHandler):
- def log_message(self,*args):pass
- def send(self,status,data):
-  body=json.dumps(data,ensure_ascii=False).encode();self.send_response(status)
-  origin=self.headers.get('Origin');allowed=os.getenv('WEBGIS_ORIGIN','http://localhost:3000')
-  if origin==allowed:self.send_header('Access-Control-Allow-Origin',allowed);self.send_header('Vary','Origin')
-  self.send_header('Content-Type','application/json; charset=utf-8');self.send_header('Content-Length',str(len(body)))
-  self.send_header('Access-Control-Allow-Headers','Content-Type');self.send_header('Access-Control-Allow-Methods','GET,POST,OPTIONS')
-  self.end_headers();self.wfile.write(body)
- def do_OPTIONS(self):self.send(200,{'ok':True})
- def do_GET(self):
-  if self.path=='/health':return self.send(200,{'status':'ok','provider':'gemini','key_configured':bool(os.getenv('GEMINI_API_KEY'))})
-  if self.path=='/summary':p=ROOT/'data'/'processed'/'summary.json'
-  elif self.path.startswith('/layers/') and self.path[8:] in LAYERS:p=LAYERS[self.path[8:]]
-  else:return self.send(404,{'error':'Endpoint tidak ditemukan'})
-  self.send(200,json.loads(p.read_text(encoding='utf-8')))
- def do_POST(self):
-  if self.path!='/chat':return self.send(404,{'error':'Endpoint tidak ditemukan'})
-  if self.headers.get('Origin') and self.headers['Origin']!=os.getenv('WEBGIS_ORIGIN','http://localhost:3000'):return self.send(403,{'error':'Origin tidak diizinkan'})
-  try:
-   size=int(self.headers.get('Content-Length','0'))
-   if not 0<size<=12000:raise ValueError('Ukuran request tidak valid')
-   data=json.loads(self.rfile.read(size))
-   if not isinstance(data,dict) or set(data)-{'question','mode','evidence_ids'}:raise ValueError('Gunakan question, mode, evidence_ids; filter polygon belum didukung')
-   if not isinstance(data.get('question'),str):raise ValueError('question harus string')
-   self.send(200,answer(data['question'],data.get('mode','preview'),evidence_ids=data.get('evidence_ids')))
-  except (ValueError,TypeError):self.send(400,{'error':'Input atau format jawaban tidak valid. Periksa question, mode dan output model.'})
-  except RuntimeError as e:self.send(502,{'error':str(e)})
-  except Exception:self.send(500,{'error':'Kesalahan internal; periksa data lokal.'})
-if __name__=='__main__':
- try:srv=ThreadingHTTPServer(('127.0.0.1',8000),Handler)
- except OSError:raise SystemExit('Port 8000 tidak bisa dibuka. Periksa server yang sudah berjalan di http://127.0.0.1:8000/health; jangan menyalakan server kedua.')
- print('Backend lokal aktif: http://127.0.0.1:8000/health (Ctrl+C untuk berhenti)')
- try:srv.serve_forever()
- except KeyboardInterrupt:pass
- finally:srv.server_close()
+from typing import Literal
+
+import uvicorn
+from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from pydantic import BaseModel, ConfigDict, Field, ValidationError
+from starlette.concurrency import run_in_threadpool
+
+from jawab import ROOT, answer
+
+LAYERS = {name: ROOT / 'data' / 'map' / (name + '.geojson') for name in (
+    'study_boundary', 'osm_reference', 'rbi_reference', 'survey_unverified'
+)}
+SUMMARY = ROOT / 'data' / 'processed' / 'summary.json'
+app = FastAPI(title='LAPAK-AI API', docs_url=None, redoc_url=None, openapi_url=None)
+origins = [value.strip() for value in os.getenv('WEBGIS_ORIGIN', 'http://localhost:3000').split(',') if value.strip()]
+app.add_middleware(CORSMiddleware, allow_origins=origins,
+                   allow_methods=['GET', 'POST'], allow_headers=['Content-Type'])
+
+
+def error(status: int, message: str):
+    return JSONResponse({'error': message}, status_code=status)
+
+
+def read_data(path: Path):
+    try:
+        return JSONResponse(json.loads(path.read_text(encoding='utf-8')))
+    except (OSError, ValueError):
+        return error(503, 'Data belum tersedia atau format data tidak valid di server.')
+
+
+@app.get('/health')
+def health():
+    return {'status': 'ok', 'provider': 'gemini',
+            'key_configured': bool(os.getenv('GEMINI_API_KEY'))}
+
+
+@app.get('/summary')
+def summary():
+    return read_data(SUMMARY)
+
+
+@app.get('/layers/{name}')
+def layer(name: str):
+    if name not in LAYERS:
+        return error(404, 'Layer tidak ditemukan.')
+    return read_data(LAYERS[name])
+
+
+class ChatInput(BaseModel):
+    model_config = ConfigDict(extra='forbid', strict=True)
+    question: str = Field(min_length=1, max_length=2000)
+    mode: Literal['preview', 'live'] = 'preview'
+    evidence_ids: list[str] | None = Field(default=None, max_length=5)
+
+
+@app.post('/chat')
+async def chat(request: Request):
+    origin = request.headers.get('origin')
+    if origin and origin not in origins:
+        return error(403, 'Origin tidak diizinkan.')
+    body = bytearray()
+    async for chunk in request.stream():
+        body.extend(chunk)
+        if len(body) > 12000:
+            return error(413, 'Permintaan terlalu besar.')
+    try:
+        data = ChatInput.model_validate_json(body)
+        if not data.question.strip():
+            raise ValueError('empty')
+    except (ValidationError, ValueError):
+        return error(400, 'Gunakan question 1–2000 karakter, mode preview/live, dan maksimal 5 evidence_ids.')
+    try:
+        return await run_in_threadpool(answer, data.question.strip(), data.mode,
+                                      evidence_ids=data.evidence_ids)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return error(503, 'Data analisis belum tersedia atau tidak valid di server.')
+    except (ValueError, TypeError):
+        return error(400, 'Input, konfigurasi AI, atau format jawaban tidak valid.')
+    except RuntimeError:
+        return error(502, 'Layanan AI belum tersedia. Coba kembali nanti.')
+    except Exception:
+        return error(500, 'Analisis gagal diproses oleh server.')
+
+
+if __name__ == '__main__':
+    uvicorn.run(app, host=os.getenv('HOST', '0.0.0.0'),
+                port=int(os.getenv('PORT', '8000')), access_log=False)

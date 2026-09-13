@@ -1,11 +1,11 @@
-import subprocess,time,urllib.request,json,os
+import subprocess,time,urllib.request,json,os,sys
 from pathlib import Path
 root=Path(__file__).resolve().parents[1]
 opener=urllib.request.build_opener(urllib.request.ProxyHandler({}))
 procs=[]
 try:
- procs.append(subprocess.Popen(['python','server.py'],cwd=root/'ai-service',stdout=None,stderr=None))
- procs.append(subprocess.Popen(['node','node_modules/next/dist/bin/next','start','-H','127.0.0.1','-p','3100'],cwd=root/'frontend',stdout=None,stderr=None))
+ procs.append(subprocess.Popen([sys.executable,'server.py'],cwd=root/'ai-service',env={**os.environ,'HOST':'127.0.0.1','PORT':'18080','GEMINI_API_KEY':''},stdout=None,stderr=None))
+ procs.append(subprocess.Popen(['node','node_modules/next/dist/bin/next','start','-H','127.0.0.1','-p','3100'],cwd=root/'frontend',env={**os.environ,'AI_BACKEND_URL':'http://127.0.0.1:18080'},stdout=None,stderr=None))
  for _ in range(15):
   try:
    r=opener.open('http://127.0.0.1:3100/api/ai/health',timeout=2)

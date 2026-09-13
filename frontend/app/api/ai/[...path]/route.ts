@@ -3,7 +3,11 @@ export const runtime = 'nodejs';
 
 async function forward(path: string, body?: {question: string; mode: string; evidence_ids?: string[]}) {
   try {
-    const base = (process.env.AI_BACKEND_URL || 'http://127.0.0.1:8000').replace(/\/$/, '');
+    const configured = process.env.AI_BACKEND_URL?.trim();
+    if (!configured && process.env.NODE_ENV === 'production') {
+      return Response.json({error: 'AI_BACKEND_URL belum dikonfigurasi pada server frontend.'}, {status: 503});
+    }
+    const base = (configured || 'http://127.0.0.1:8000').replace(/\/$/, '');
     const response = await fetch(`${base}/${path}`, {
       method: body ? 'POST' : 'GET',
       headers: {'Content-Type': 'application/json'},
