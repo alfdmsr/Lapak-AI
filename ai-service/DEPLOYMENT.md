@@ -21,7 +21,42 @@ HOST dan PORT dapat diganti melalui environment. Health tersedia pada /health.
 Layer tidak membutuhkan GEMINI_API_KEY. /chat mode live membutuhkan konfigurasi
 AI; preview tidak memanggil provider.
 
-## Render (Web Service)
+## Vercel Hobby (alternatif tanpa kartu)
+
+Gunakan akun Hobby yang sudah digunakan frontend dan buat project KEDUA dari
+repository yang sama. Jangan ubah Root Directory project frontend.
+
+| Pengaturan | Nilai |
+| --- | --- |
+| Project Name | lapak-ai-backend |
+| Root Directory | ai-service |
+| Framework Preset | FastAPI |
+| Build / Install / Output overrides | Nonaktif, gunakan default FastAPI |
+
+Vercel mendeteksi app pada server.py dan memasang requirements.txt. Jangan
+memasukkan npm ci, npm run build, atau python server.py sebagai build command.
+Runtime Vercel mengimpor app; blok __main__ hanya digunakan saat menjalankan
+server lokal/Render. Tidak perlu HOST, PORT, atau health-check setting Render.
+vercel.json menetapkan durasi maksimum function 300 detik. Ini batas, bukan
+jaminan latensi chat. Uji data/preview dahulu; AI live tetap bergantung provider
+dan kuota serta durasi kedua function (frontend dan backend).
+
+Atur WEBGIS_ORIGIN ke origin frontend. GEMINI_API_KEY hanya diperlukan untuk
+AI live. Jangan upgrade ke Pro atau menambahkan metode pembayaran untuk alur
+ini. Kebijakan verifikasi akun tetap ditentukan Vercel.
+
+.vercelignore mengecualikan environment lokal, input mentah dan file tes.
+data/map dan data/processed tetap diperlukan dalam bundle, bukan dipindahkan
+ke public. Uji /health, /summary, dan semua layer setelah deploy.
+Gunakan domain Production stabil backend sebagai AI_BACKEND_URL frontend dan
+redeploy frontend. Uji /health backend dari browser tanpa login: halaman login
+atau 401 berarti Deployment Protection menghalangi proxy. Gunakan pengaturan
+akses production yang sesuai untuk endpoint publik, bukan URL Preview berlogin.
+
+Referensi: https://vercel.com/docs/frameworks/backend/fastapi
+Hobby: https://vercel.com/docs/plans/hobby
+
+## Render (Web Service, dapat meminta verifikasi kartu)
 
 Hubungkan repository GitHub, lalu isi:
 

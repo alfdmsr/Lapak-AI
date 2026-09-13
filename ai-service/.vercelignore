@@ -1,0 +1,10 @@
+.env
+.env.*
+.venv/
+__pycache__/
+*.pyc
+*.log
+test_*.py
+requirements-dev.txt
+data/input/
+*.bat
